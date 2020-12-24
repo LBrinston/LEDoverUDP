@@ -103,23 +103,6 @@ namespace LEDoverUDP
         {
 
             updateChkSum();
-          
-            //String temp = Convert.ToString(packetBuilder.calChkSum(txtDatagram.Text), 10);
-            //
-            //
-            //// Check if we've dropped any leading zeros on our String representaton of the CheckSum 
-            //if (temp.Length == 1)
-            //{
-            //    txtChksum.Text = "00" + temp;
-            //}
-            //else if (temp.Length == 2)
-            //{
-            //    txtChksum.Text = "0" + temp;
-            //}
-            //else
-            //{
-            //    txtChksum.Text = temp;
-            //}
 
         }
 
@@ -138,11 +121,19 @@ namespace LEDoverUDP
             }
         }
 
-
+        // Changed to scroll event for debugging
         private void scrollBar_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
+            
+        }
 
+        private void scrollBar_Scroll(object sender, System.Windows.Controls.Primitives.ScrollEventArgs e)
+        {
+            updateColourValues();
+        }
 
+        public void updateColourValues()
+        {
             byte bRed = Convert.ToByte(scrollBarRed.Value); // Must be a byte because alpha channels are specified in hex
             byte bGreen = Convert.ToByte(scrollBarGreen.Value);
             byte bBlue = Convert.ToByte(scrollBarBlue.Value);
@@ -156,24 +147,22 @@ namespace LEDoverUDP
 
             // Update the colour values in the datagram
             // BUT first check which LED we're adjusting the colour channels for 
-            if (rbtnLED0.IsChecked == true) 
+            if (rbtnLED0.IsChecked == true)
             {
                 // Loosing leading zeros again
                 //String colourValue = Convert.ToString(bRed, 16) + Convert.ToString(bGreen, 16) + Convert.ToString(bBlue, 16);
                 String colourValue = colourCode.ToString("X6");
                 txtDatagram.Text = txtDatagram.Text.Remove(5, 6);
-                txtDatagram.Text = txtDatagram.Text.Insert(5, colourValue); 
+                txtDatagram.Text = txtDatagram.Text.Insert(5, colourValue);
+                btnColourLED0.Background = new SolidColorBrush(Color.FromArgb(255, bRed, bGreen, bBlue)); // Update the colour preview
             }
             else if (rbtnLED1.IsChecked == true)
             {
                 String colourValue = colourCode.ToString("X6");
                 txtDatagram.Text = txtDatagram.Text.Remove(13, 6);
                 txtDatagram.Text = txtDatagram.Text.Insert(13, colourValue);
+                btnColourLED1.Background = new SolidColorBrush(Color.FromArgb(255, bRed, bGreen, bBlue));
             }
-            // // Change our colour preview box to newly selected colour
-            btnColourIndicator.Background = new SolidColorBrush(Color.FromArgb(255, bRed, bGreen, bBlue)); // A stands for apacity (aka
-            solidColorBrush.Color = Color.FromArgb(255, bRed, bGreen, bBlue);                           // Store our new colour value in our solidColourBrush Object
-
             updateChkSum();
         }
 
@@ -196,6 +185,30 @@ namespace LEDoverUDP
             }
 
         }
+
+        // Moves scollbars back to the colour values specified in the datagram
+        private void rbtnLED0_Checked(object sender, RoutedEventArgs e)
+        {
+            scrollBarRed.Value = Convert.ToInt32(txtDatagram.Text.Substring(5, 2), 16);
+            txtRed.Text = Convert.ToString(scrollBarRed.Value);
+      
+            scrollBarGreen.Value = Convert.ToInt32(txtDatagram.Text.Substring(7, 2), 16);
+            txtGreen.Text = Convert.ToString(scrollBarGreen.Value);
+
+            scrollBarBlue.Value = Convert.ToInt32(txtDatagram.Text.Substring(9, 2), 16);
+            txtBlue.Text = Convert.ToString(scrollBarBlue.Value);
+        }
+
+        private void rbtnLED1_Checked(object sender, RoutedEventArgs e)
+        {
+            scrollBarRed.Value = Convert.ToInt32(txtDatagram.Text.Substring(13, 2), 16);
+            txtRed.Text = Convert.ToString(scrollBarRed.Value);
+            scrollBarGreen.Value = Convert.ToInt32(txtDatagram.Text.Substring(15, 2), 16);
+            txtGreen.Text = Convert.ToString(scrollBarGreen.Value);
+            scrollBarBlue.Value = Convert.ToInt32(txtDatagram.Text.Substring(17, 2), 16);
+            txtBlue.Text = Convert.ToString(scrollBarBlue.Value);
+        }
+
     }
 }
     
