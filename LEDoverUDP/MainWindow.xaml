@@ -23,7 +23,7 @@
             </StackPanel>
             <StackPanel>
                 <Label x:Name="lblDatagram" Margin="2,2,2,2">Datagram</Label>
-                <TextBox x:Name="txtDatagram" Margin="2,2,2,2" Width="150"  Text="0000000000000000" FontSize="15"/>
+                <TextBox x:Name="txtDatagram" Margin="2,2,2,2" Width="170"  Text="###0000000000000000" FontSize="15" LostKeyboardFocus="txtDatagram_LostKeyboardFocus"/>
             </StackPanel>
             <StackPanel>
                 <Label x:Name="lblChksum" Margin="2,2,2,2">Checksum</Label>
@@ -31,7 +31,7 @@
             </StackPanel>
             <StackPanel>
                 <Label x:Name="lblSend" Margin="2,2,2,2">Send</Label>
-                <Button x:Name="btnSend" Margin="2,2,2,2" Content="Send"/>
+                <Button x:Name="btnSend" Margin="2,2,2,2" Content="Send" Click="btnSend_Click"/>
             </StackPanel>
         </StackPanel>
         <Label x:Name="lblCurrent" Margin="2,2,2,2">Current Configuration</Label>
@@ -43,6 +43,35 @@
         <StackPanel>
             <TextBox x:Name="txtErrors" Margin="2,2,2,2" Width="200" HorizontalAlignment="Left"/>
         </StackPanel>
+        <!--Colour Picker Starts Here-->
+        <StackPanel x:Name="ColourPicker" Orientation="Vertical" HorizontalAlignment="Left">
+            <!-- StackPanel to Colour Indicator and label-->
+            <StackPanel x:Name="ColourIndicator" Margin="2,2,2,2" Orientation="Horizontal" HorizontalAlignment="Center">
+                <Label x:Name="lblColorIndicator" Margin="2,2,2,2" HorizontalAlignment="Center" FontSize="15" Content="Current Colour"/>
+                <Button x:Name="btnColourIndicator" Margin="2,2,2,2" Width="15" Height="15" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                <Label x:Name="lblLED0" Margin="2,2,2,2" FontSize="15">LED0</Label>
+                <RadioButton x:Name="rbtnLED0" Margin="2,2,2,2" VerticalAlignment="Center"/>
+                <Label x:Name="lblLED1" Margin="2,2,2,2" FontSize="15">LED1</Label>
+                <RadioButton x:Name="rbtnLED1" Margin="2,2,2,2" VerticalAlignment="Center"/>
+            </StackPanel>
+            <!-- StackPanel for inidividual colour slider and associated elements-->
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                <Label x:Name="lblRed" Margin="2,2,2,2" Width="70" FontSize="15" Content="Red"/>
+                <ScrollBar x:Name="scrollBarRed"  Orientation="Horizontal" Height="20" Width="245" Margin="2,2,2,2" Maximum ="255" ValueChanged="scrollBar_ValueChanged"/>
+                <TextBlock x:Name="txtRed" Margin="2,2,2,2" Width="50" Text="0" FontSize="15"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                <Label x:Name="lblGreen" Margin="2,2,2,2" Width="70" FontSize="15" Content="Green"/>
+                <ScrollBar x:Name="scrollBarGreen" Orientation="Horizontal" Height="20" Width="245" Margin="2,2,2,2" Maximum="255" ValueChanged="scrollBar_ValueChanged"/>
+                <TextBlock x:Name="txtGreen" Margin="2,2,2,2" Width="50" Text="0" FontSize="15"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                <Label x:Name="lblBlue" Margin="2,2,2,2" Width="70" FontSize="15" Content="Blue"/>
+                <ScrollBar x:Name="scrollBarBlue"  Orientation="Horizontal" Height="20" Width="245" Margin="2,2,2,2" Maximum ="255" ValueChanged="scrollBar_ValueChanged"/>
+                <TextBlock x:Name="txtBlue" Margin="2,2,2,2" Width="50" Text="0" FontSize="15"/>
+            </StackPanel>
+        </StackPanel>
+
     </StackPanel>
    
 </Window>

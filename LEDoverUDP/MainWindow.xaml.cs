@@ -15,6 +15,14 @@ using System.Windows.Shapes;
 using System.Net.Sockets;
 using System.Net;
 
+/* 
+ * 
+ * @brief: GUI controller for WS2812b addressable LED strips via UDP packets.
+ * @author: Liam Brinston
+ * 
+ */
+
+
 namespace LEDoverUDP
 {
     /// <summary>
@@ -24,6 +32,9 @@ namespace LEDoverUDP
     {
 
 
+        packetBuilder packetBuilder = new packetBuilder();
+        UdpClient udpClient = new UdpClient();
+        SolidColorBrush solidColorBrush = new SolidColorBrush(); // Used for displaying the currently selected colour
 
         //public IPAddress (byte[] address);
         public byte[] address = new byte[4]; // Holds the quartet found in the dotted quad representation of IP inputted by the user.
@@ -52,16 +63,16 @@ namespace LEDoverUDP
         {
             // Establish UDP connection here?
 
-            UdpClient udpClient = new UdpClient();
+
             IPEndPoint ipEndPoint = new IPEndPoint(targetIP, targetPort);
-                        
+
             try
             {
                 udpClient.Connect(ipEndPoint);
             }
-            catch (Exception e)
+            catch (Exception f)
             {
-                txtErrors.Text = e.ToString(); // If there is an error push it to the Error reporting box
+                txtErrors.Text = f.ToString(); // If there is an error push it to the Error reporting box
             }
 
         }
@@ -74,9 +85,9 @@ namespace LEDoverUDP
 
             // IPAdress.Parse is a static method. It is called on the class not the IPAddress instance
             targetIP = IPAddress.Parse(txtIPAddr.Text);
-            
+
             // Should update the displayed current port configuration
-            txtIPAddrCur.Text = targetIP.ToString(); 
+            txtIPAddrCur.Text = targetIP.ToString();
         }
 
         //Updates the targetPort variable after user input
@@ -86,7 +97,106 @@ namespace LEDoverUDP
             txtPortCur.Text = targetPort.ToString();
             // Should update the displayed current port configuration
         }
+
+        // Updates the checksum when the datagram values have been changed by the user
+        private void txtDatagram_LostKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
+        {
+
+            updateChkSum();
+          
+            //String temp = Convert.ToString(packetBuilder.calChkSum(txtDatagram.Text), 10);
+            //
+            //
+            //// Check if we've dropped any leading zeros on our String representaton of the CheckSum 
+            //if (temp.Length == 1)
+            //{
+            //    txtChksum.Text = "00" + temp;
+            //}
+            //else if (temp.Length == 2)
+            //{
+            //    txtChksum.Text = "0" + temp;
+            //}
+            //else
+            //{
+            //    txtChksum.Text = temp;
+            //}
+
+        }
+
+        private void btnSend_Click(object sender, RoutedEventArgs e)
+        {
+            Byte[] sendBytes = Encoding.ASCII.GetBytes(txtDatagram.Text + txtChksum.Text + "\r\n");
+
+            // Try to send
+            try
+            {
+                udpClient.Send(sendBytes, sendBytes.Length);
+            }
+            catch (Exception f) // Catch if the user forget to connect before trying to send
+            {
+                txtErrors.Text = f.ToString(); // If there is an error push it to the Error reporting box
+            }
+        }
+
+
+        private void scrollBar_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+
+
+            byte bRed = Convert.ToByte(scrollBarRed.Value); // Must be a byte because alpha channels are specified in hex
+            byte bGreen = Convert.ToByte(scrollBarGreen.Value);
+            byte bBlue = Convert.ToByte(scrollBarBlue.Value);
+
+            uint colourCode = ((uint)bRed << 16) + ((uint)bGreen << 8) + (uint)bBlue; // Create a single colour value from our byte colour values
+
+            // Update the channel values
+            txtRed.Text = bRed.ToString();
+            txtGreen.Text = bGreen.ToString();
+            txtBlue.Text = bBlue.ToString();
+
+            // Update the colour values in the datagram
+            // BUT first check which LED we're adjusting the colour channels for 
+            if (rbtnLED0.IsChecked == true) 
+            {
+                // Loosing leading zeros again
+                //String colourValue = Convert.ToString(bRed, 16) + Convert.ToString(bGreen, 16) + Convert.ToString(bBlue, 16);
+                String colourValue = colourCode.ToString("X6");
+                txtDatagram.Text = txtDatagram.Text.Remove(5, 6);
+                txtDatagram.Text = txtDatagram.Text.Insert(5, colourValue); 
+            }
+            else if (rbtnLED1.IsChecked == true)
+            {
+                String colourValue = colourCode.ToString("X6");
+                txtDatagram.Text = txtDatagram.Text.Remove(13, 6);
+                txtDatagram.Text = txtDatagram.Text.Insert(13, colourValue);
+            }
+            // // Change our colour preview box to newly selected colour
+            btnColourIndicator.Background = new SolidColorBrush(Color.FromArgb(255, bRed, bGreen, bBlue)); // A stands for apacity (aka
+            solidColorBrush.Color = Color.FromArgb(255, bRed, bGreen, bBlue);                           // Store our new colour value in our solidColourBrush Object
+
+            updateChkSum();
+        }
+
+        public void updateChkSum()
+        {
+            String CheckSum = Convert.ToString(packetBuilder.calChkSum(txtDatagram.Text), 10);
+
+            // Check if we've dropped any leading zeros on our String representaton of the CheckSum 
+            if (CheckSum.Length == 1)
+            {
+                txtChksum.Text = "00" + CheckSum;
+            }
+            else if (CheckSum.Length == 2)
+            {
+                txtChksum.Text = "0" + CheckSum;
+            }
+            else
+            {
+                txtChksum.Text = CheckSum;
+            }
+
+        }
     }
-}   
+}
     
 
