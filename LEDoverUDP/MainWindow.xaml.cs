@@ -163,6 +163,16 @@ namespace LEDoverUDP
                 txtDatagram.Text = txtDatagram.Text.Insert(13, colourValue);
                 btnColourLED1.Background = new SolidColorBrush(Color.FromArgb(255, bRed, bGreen, bBlue));
             }
+            else if (rbtnSync.IsChecked == true)
+            {
+                String colourValue = colourCode.ToString("X6");
+                txtDatagram.Text = txtDatagram.Text.Remove(5, 6);
+                txtDatagram.Text = txtDatagram.Text.Insert(5, colourValue);
+                txtDatagram.Text = txtDatagram.Text.Remove(13, 6);
+                txtDatagram.Text = txtDatagram.Text.Insert(13, colourValue);
+                btnColourLED0.Background = new SolidColorBrush(Color.FromArgb(255, bRed, bGreen, bBlue)); // Update the colour preview
+                btnColourLED1.Background = new SolidColorBrush(Color.FromArgb(255, bRed, bGreen, bBlue));
+            }
             updateChkSum();
         }
 
@@ -209,6 +219,20 @@ namespace LEDoverUDP
             txtBlue.Text = Convert.ToString(scrollBarBlue.Value);
         }
 
+        private void rbtnSync_Checked(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void chkConfig_Checked(object sender, RoutedEventArgs e)
+        {
+            UDPStack.Visibility = Visibility.Collapsed;
+        }
+
+        private void chkConfig_Unchecked(object sender, RoutedEventArgs e)
+        {
+            UDPStack.Visibility = Visibility.Visible;
+        }
     }
 }
     

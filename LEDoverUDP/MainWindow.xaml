@@ -7,8 +7,8 @@
         mc:Ignorable="d"
         Title="LED/UDP" Height="450" Width="800">
     <StackPanel>
-        <Label x:Name="lblUDPConfig" Margin="2,2,2,2">UDP Configuration</Label>
-        <StackPanel Orientation="Horizontal">
+        <CheckBox x:Name="chkConfig" Content="UDP Configuration" Checked="chkConfig_Checked" Unchecked="chkConfig_Unchecked"/>
+        <StackPanel x:Name="UDPStack" Orientation="Horizontal">
             <StackPanel>
                 <Label x:Name="lblIPAddr" Margin="2,2,2,2">IPAddress</Label>
                 <TextBox x:Name="txtIPAddr" Margin="2,2,2,2" Width="100" Text="0.0.0.0" FontSize="15" LostKeyboardFocus="txtIPAddr_LostKeyboardFocus"/>
@@ -21,6 +21,20 @@
                 <Label x:Name="lblBlank" Margin="2,2,2,2">Connect</Label>
                 <Button x:Name="btnConnect" Margin="2,2,2,2" Content="Connect" Click="btnConnect_Click"/>
             </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <Label x:Name="lblCurrent" Margin="2,2,2,2">Current Configuration</Label>
+                <StackPanel>
+                    <TextBox x:Name="txtIPAddrCur" Margin="2,2,12,2" Width="100" Text="0.0.0.0" FontSize="15"/>
+                    <TextBox x:Name="txtPortCur" Margin="2,2,2,2" Width="50" Text="0000" FontSize="15" HorizontalContentAlignment="Center"/>
+                </StackPanel>
+            </StackPanel>
+           
+            <StackPanel>
+                <Label x:Name="lblErrors" Margin="2,2,2,2">Errors</Label>
+                <TextBox x:Name="txtErrors" Margin="2,2,2,2" Width="200" HorizontalAlignment="Left"/>
+            </StackPanel>
+        </StackPanel> <!---->
+        <StackPanel Orientation="Horizontal">
             <StackPanel>
                 <Label x:Name="lblDatagram" Margin="2,2,2,2">Datagram</Label>
                 <TextBox x:Name="txtDatagram" Margin="2,2,2,2" Width="170"  Text="###0000000001000000" FontSize="15" LostKeyboardFocus="txtDatagram_LostKeyboardFocus"/>
@@ -34,21 +48,15 @@
                 <Button x:Name="btnSend" Margin="2,2,2,2" Content="Send" Click="btnSend_Click"/>
             </StackPanel>
         </StackPanel>
-        <Label x:Name="lblCurrent" Margin="2,2,2,2">Current Configuration</Label>
-        <StackPanel Orientation="Horizontal">
-            <TextBox x:Name="txtIPAddrCur" Margin="2,2,12,2" Width="100" Text="0.0.0.0" FontSize="15"/>
-            <TextBox x:Name="txtPortCur" Margin="2,2,2,2" Width="50" Text="0000" FontSize="15" HorizontalContentAlignment="Center"/>
-        </StackPanel>
-        <Label x:Name="lblErrors" Margin="2,2,2,2">Errors</Label>
-        <StackPanel>
-            <TextBox x:Name="txtErrors" Margin="2,2,2,2" Width="200" HorizontalAlignment="Left"/>
-        </StackPanel>
+
+
+
         <!--Colour Picker Starts Here-->
-        <StackPanel x:Name="ColourPicker" Orientation="Vertical" HorizontalAlignment="Left">
+        <StackPanel x:Name="ColourPickerStack" Orientation="Vertical" HorizontalAlignment="Left">
             <!-- StackPanel to Colour Indicator and label-->
             <StackPanel x:Name="ColourIndicator" Margin="2,2,2,2" Orientation="Horizontal" HorizontalAlignment="Center">
+                <ComboBox x:Name="comboModeSelector" />
                 <Label x:Name="lblColorIndicator" Margin="2,2,2,2" HorizontalAlignment="Center" FontSize="15" Content="LED Selector:"/>
-                
                 <!--Radio buttons for LED Selection-->
                 <RadioButton x:Name="rbtnLED0" Margin="2,2,2,2" VerticalAlignment="Center" Checked="rbtnLED0_Checked"/>
                 <Button x:Name="btnColourLED0" Margin="2,2,2,2" Width="15" Height="15" VerticalAlignment="Center" HorizontalAlignment="Center"/>
@@ -57,6 +65,9 @@
                 <RadioButton x:Name="rbtnLED1" Margin="2,2,2,2" VerticalAlignment="Center" Checked="rbtnLED1_Checked"/>
                 <Button x:Name="btnColourLED1" Margin="2,2,2,2" Width="15" Height="15" VerticalAlignment="Center" HorizontalAlignment="Center"/>
                 <Label x:Name="lblLED1" Margin="2,2,2,2" FontSize="15">LED1</Label>
+                <!---->
+                <RadioButton x:Name="rbtnSync" Margin="2,2,2,2" VerticalAlignment="Center" Checked="rbtnSync_Checked"/>
+                <Label x:Name="lblSync" Margin="2,2,2,2" FontSize="15">Sync</Label>
             </StackPanel>
             <!-- StackPanel for inidividual colour slider and associated elements-->
             <!--Red-->
@@ -77,8 +88,9 @@
                 <ScrollBar x:Name="scrollBarBlue"  Orientation="Horizontal" Height="20" Width="245" Margin="2,2,2,2" Maximum ="255" SmallChange="1" ValueChanged="scrollBar_ValueChanged" Scroll="scrollBar_Scroll"/>
                 <TextBlock x:Name="txtBlue" Margin="2,2,2,2" Width="50" Text="0" FontSize="15"/>
             </StackPanel>
+
         </StackPanel>
 
+
     </StackPanel>
-   
 </Window>
