@@ -8,6 +8,7 @@
         Title="LED/UDP" Height="450" Width="800">
     <StackPanel>
         <CheckBox x:Name="chkConfig" Content="UDP Configuration" Checked="chkConfig_Checked" Unchecked="chkConfig_Unchecked"/>
+        <!--UDP Config stack-->
         <StackPanel x:Name="UDPStack" Orientation="Horizontal">
             <StackPanel>
                 <Label x:Name="lblIPAddr" Margin="2,2,2,2">IPAddress</Label>
@@ -30,8 +31,11 @@
             </StackPanel>
            
             <StackPanel>
-                <Label x:Name="lblErrors" Margin="2,2,2,2">Errors</Label>
-                <TextBox x:Name="txtErrors" Margin="2,2,2,2" Width="200" HorizontalAlignment="Left"/>
+                <StackPanel Orientation="Horizontal">
+                    <Label x:Name="lblErrors" Margin="2,2,2,2">Errors</Label>
+                    <Button x:Name="clearErrors" Margin="2,2,2,2" Content="Clear Errors" Click="clearErrors_Click"/>
+                </StackPanel>
+                <TextBox x:Name="txtErrors" Margin="2,2,2,2" HorizontalAlignment="Left" VerticalScrollBarVisibility="Auto" Height="50" MaxHeight="50"  Width="300"/>
             </StackPanel>
         </StackPanel> <!---->
         <StackPanel Orientation="Horizontal">
@@ -49,43 +53,71 @@
             </StackPanel>
         </StackPanel>
 
-
-
         <!--Colour Picker Starts Here-->
         <StackPanel x:Name="ColourPickerStack" Orientation="Vertical" HorizontalAlignment="Left">
             <!-- StackPanel to Colour Indicator and label-->
             <StackPanel x:Name="ColourIndicator" Margin="2,2,2,2" Orientation="Horizontal" HorizontalAlignment="Center">
-                <ComboBox x:Name="comboModeSelector" />
-                <Label x:Name="lblColorIndicator" Margin="2,2,2,2" HorizontalAlignment="Center" FontSize="15" Content="LED Selector:"/>
-                <!--Radio buttons for LED Selection-->
-                <RadioButton x:Name="rbtnLED0" Margin="2,2,2,2" VerticalAlignment="Center" Checked="rbtnLED0_Checked"/>
-                <Button x:Name="btnColourLED0" Margin="2,2,2,2" Width="15" Height="15" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                <Label x:Name="lblLED0" Margin="2,2,2,2" FontSize="15">LED0</Label>
-                <!---->
-                <RadioButton x:Name="rbtnLED1" Margin="2,2,2,2" VerticalAlignment="Center" Checked="rbtnLED1_Checked"/>
-                <Button x:Name="btnColourLED1" Margin="2,2,2,2" Width="15" Height="15" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                <Label x:Name="lblLED1" Margin="2,2,2,2" FontSize="15">LED1</Label>
-                <!---->
-                <RadioButton x:Name="rbtnSync" Margin="2,2,2,2" VerticalAlignment="Center" Checked="rbtnSync_Checked"/>
-                <Label x:Name="lblSync" Margin="2,2,2,2" FontSize="15">Sync</Label>
+                <Label x:Name="lblColorIndicator" Margin="2,2,2,2" HorizontalAlignment="Center" FontSize="15" Content="Mode Select:"/>
+                <!--Mode Selection ComboBox-->
+                <ComboBox x:Name="comboModeSelector" StaysOpenOnEdit="False" Margin="2,2,2,2">
+                    <Button x:Name="btnSelectorMode" Content="SelectMode" Click="btnSelectorMode_Click"/>
+                    <Button x:Name="btnFadeMode" Content="FadeMode" Click="btnFadeMode_Click"/>
+                </ComboBox>
+                
+                
+                <StackPanel x:Name="indivStack" Orientation="Horizontal">
+                    <!--Radio buttons for LED Selection-->
+                    <!--ToggleButton x:Name="tbtnTest" Content="LED0"  IsThreeState="False"/-->
+                    <RadioButton x:Name="rbtnLED0" Margin="2,2,2,2" VerticalAlignment="Center" Checked="rbtnLED0_Checked"/>
+                    <Button x:Name="btnColourLED0" Margin="2,2,2,2" Width="15" Height="15" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                    <Label x:Name="lblLED0" Margin="2,2,2,2" FontSize="15">LED0</Label>
+                    <!---->
+                    <RadioButton x:Name="rbtnLED1" Margin="2,2,2,2" VerticalAlignment="Center" Checked="rbtnLED1_Checked"/>
+                    <Button x:Name="btnColourLED1" Margin="2,2,2,2" Width="15" Height="15" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                    <Label x:Name="lblLED1" Margin="2,2,2,2" FontSize="15">LED1</Label>
+                    <!---->
+                    <RadioButton x:Name="rbtnSync" Margin="2,2,2,2" VerticalAlignment="Center" Checked="rbtnSync_Checked"/>
+                    <Label x:Name="lblSync" Margin="2,2,2,2" FontSize="15">Sync</Label>
+                </StackPanel>
+                <!--Fade Stack-->
+                <StackPanel x:Name="fadeStack" Orientation="Horizontal" Visibility="Collapsed">
+                    <!--From LED00 To-->
+                    <Label x:Name="lblFrom0" Margin="2,2,2,2" FontSize="15">From</Label>
+                    <RadioButton x:Name="rbtnFromLED0" Margin="2,2,2,2" VerticalAlignment="Center"/>
+                    <Button x:Name="btnFromColourLED0" Margin="2,2,2,2" Width="15" Height="15" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                    <Label x:Name="lblLED0fade" Margin="2,2,2,2" FontSize="15">LED0</Label>
+                    <Label x:Name="lblTo0" Margin="2,2,2,2" FontSize="15">To</Label>
+                    <RadioButton x:Name="rbtnToLED0" Margin="2,2,2,2" VerticalAlignment="Center"/>
+                    <Button x:Name="btnToColourLED0" Margin="2,2,2,2" Width="15" Height="15" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                    <Label x:Name="lblDivider" Margin="2,2,2,2" FontSize="15"> </Label>
+                    <!--From LED01 To-->
+                    <Label x:Name="lblFrom1" Margin="2,2,2,2" FontSize="15">From</Label>
+                    <RadioButton x:Name="rbtnFromLED1" Margin="2,2,2,2" VerticalAlignment="Center"/>
+                    <Button x:Name="btnFromColourLED1" Margin="2,2,2,2" Width="15" Height="15" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                    <Label x:Name="lblLED1fade" Margin="2,2,2,2" FontSize="15">LED1</Label>
+                    <Label x:Name="lblTo1" Margin="2,2,2,2" FontSize="15">To</Label>
+                    <RadioButton x:Name="rbtnToLED1" Margin="2,2,2,2" VerticalAlignment="Center"/>
+                    <Button x:Name="btnToColourLED1" Margin="2,2,2,2" Width="15" Height="15" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                </StackPanel>
+                
             </StackPanel>
             <!-- StackPanel for inidividual colour slider and associated elements-->
             <!--Red-->
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                 <Label x:Name="lblRed" Margin="2,2,2,2" Width="70" FontSize="15" Content="Red"/>
-                <ScrollBar x:Name="scrollBarRed"  Orientation="Horizontal" Height="20" Width="245" Margin="2,2,2,2" Maximum ="255" SmallChange="1" ValueChanged="scrollBar_ValueChanged" Scroll="scrollBar_Scroll" />
+                <ScrollBar x:Name="scrollBarRed"  Orientation="Horizontal" Height="20" Width="245" Margin="2,2,2,2" Maximum ="255" SmallChange="1" Scroll="scrollBar_Scroll" />
                 <TextBlock x:Name="txtRed" Margin="2,2,2,2" Width="50" Text="0" FontSize="15"/>
             </StackPanel>
             <!--Green-->
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                 <Label x:Name="lblGreen" Margin="2,2,2,2" Width="70" FontSize="15" Content="Green"/>
-                <ScrollBar x:Name="scrollBarGreen" Orientation="Horizontal" Height="20" Width="245" Margin="2,2,2,2" Maximum="255" SmallChange="1" ValueChanged="scrollBar_ValueChanged" Scroll="scrollBar_Scroll"/>
+                <ScrollBar x:Name="scrollBarGreen" Orientation="Horizontal" Height="20" Width="245" Margin="2,2,2,2" Maximum="255" SmallChange="1" Scroll="scrollBar_Scroll"/>
                 <TextBlock x:Name="txtGreen" Margin="2,2,2,2" Width="50" Text="0" FontSize="15"/>
             </StackPanel>
             <!--Blue-->
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                 <Label x:Name="lblBlue" Margin="2,2,2,2" Width="70" FontSize="15" Content="Blue"/>
-                <ScrollBar x:Name="scrollBarBlue"  Orientation="Horizontal" Height="20" Width="245" Margin="2,2,2,2" Maximum ="255" SmallChange="1" ValueChanged="scrollBar_ValueChanged" Scroll="scrollBar_Scroll"/>
+                <ScrollBar x:Name="scrollBarBlue"  Orientation="Horizontal" Height="20" Width="245" Margin="2,2,2,2" Maximum ="255" SmallChange="1" Scroll="scrollBar_Scroll"/>
                 <TextBlock x:Name="txtBlue" Margin="2,2,2,2" Width="50" Text="0" FontSize="15"/>
             </StackPanel>
 

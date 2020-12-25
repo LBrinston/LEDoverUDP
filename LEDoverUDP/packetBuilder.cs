@@ -28,6 +28,10 @@ namespace LEDoverUDP
             ChkSum %= 1000;
             return ChkSum;
         }
+
+        public void fadeCalcs() { 
+        }
+
     }
 
 }
