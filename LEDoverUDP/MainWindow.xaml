@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:LEDoverUDP"
         mc:Ignorable="d"
-        Title="LED/UDP" Height="450" Width="800">
+        Title="LED/UDP" Height="450" Width="800" Background="#FF5A607A">
     <StackPanel>
         <CheckBox x:Name="chkConfig" Content="UDP Configuration" Checked="chkConfig_Checked" Unchecked="chkConfig_Unchecked"/>
         <!--UDP Config stack-->
