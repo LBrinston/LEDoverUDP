@@ -15,11 +15,12 @@ using System.Windows.Shapes;
 using System.Net.Sockets;
 using System.Net;
 using System.Threading;    // Needed for fade mode
-using System.Diagnostics; // Stopwatch code used with threading comes from here
 
 /* 
- * @brief: GUI controller for WS2812b addressable LED. Control is done via UDP packets sent to an ESP32 which is wired to the LEDs.
+ * @title: LEDoverUDP
+ * @brief: GUI controller for ECET 230 Final Project - control of WS2812b addressable LEDs over UDP. 
  * @author: Liam Brinston
+ * @date: 2020/12/25
  * 
  */
 
@@ -166,6 +167,7 @@ namespace LEDoverUDP
                 }
 
                 //Multi-threading
+                LEDmath.fadeDelay = Convert.ToInt32(txtfadeTime.Text); // update the fade transition time
                 var thread = new Thread(new ThreadStart(fadeThread));
                 // Now activate the helper thread to handle the rest of the fade
                 thread.Start();
@@ -178,8 +180,8 @@ namespace LEDoverUDP
         /// </summary>
         private void fadeThread()
         {
-            TimeSpan interval = new TimeSpan(0,0,0,0,50); // 100ms "delay" interval
-            
+            TimeSpan interval = new TimeSpan(0,0,0,0,LEDmath.fadeDelay); // 100ms "delay" interval
+            //
             for (int i = 0; i < LEDmath.fadeStep; i++) // Loop # of times specified in LEDMath.fadeStep to achieve colour fade
             {
                 // https://stackoverflow.com/questions/9732709/the-calling-thread-cannot-access-this-object-because-a-different-thread-owns-it

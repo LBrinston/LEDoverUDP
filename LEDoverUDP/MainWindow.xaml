@@ -98,6 +98,9 @@
                     <Label x:Name="lblTo1" Margin="2,2,2,2" FontSize="15">To</Label>
                     <RadioButton x:Name="rbtnToLED1" Margin="2,2,2,2" VerticalAlignment="Center"/>
                     <Button x:Name="btnToColourLED1" Margin="2,2,2,2" Width="15" Height="15" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                    <Label x:Name="lblFadeTime" Margin="2,2,2,2" FontSize="15">Fade Time:</Label>
+                    <TextBox x:Name="txtfadeTime" Margin="2,2,2,2" FontSize="15" Text="20" VerticalAlignment="Center"/>
+                    <Label x:Name="lblUnits" Margin="2,2,2,2" FontSize="15">ms</Label>
                 </StackPanel>
                 
             </StackPanel>

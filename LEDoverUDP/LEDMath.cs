@@ -7,6 +7,7 @@ namespace LEDoverUDP
     class LEDMath
     {
         public int fadeStep = 20; // Default 20ms delay
+        public int fadeDelay = 20; // 20ms default fade time
 
         public uint fromLED0;
         public uint toLED0;
